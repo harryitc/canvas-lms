@@ -32,3 +32,52 @@ function setup_docker_as_nonroot {
   message 'We need to login again to apply that change.'
   confirm_command "exec sg docker -c $0"
 }
+
+function user_gem_bin_path {
+  ruby -r rubygems -e 'print "#{Gem.user_dir}/bin"'
+}
+
+function ensure_user_gem_bin_in_path {
+  installed ruby || return 0
+
+  local gem_bin
+  gem_bin="$(user_gem_bin_path)"
+  case ":$PATH:" in
+    *":$gem_bin:"*) ;;
+    *) export PATH="$gem_bin:$PATH" ;;
+  esac
+}
+
+function install_ruby_and_build_tools {
+  if installed ruby && installed gem; then
+    return 0
+  fi
+
+  if ! installed apt-get; then
+    warning_message "Ruby, RubyGems, and build-essential are required to install dory automatically. Please install them manually and rerun this script."
+    return 1
+  fi
+
+  message 'Installing Ruby, RubyGems, and build tools required for dory...'
+  confirm_command 'sudo apt-get update && sudo apt-get install -y ruby-full ruby-dev build-essential'
+}
+
+function install_dory_if_missing {
+  ensure_user_gem_bin_in_path
+  installed dory && return 0
+
+  prompt 'dory is not installed. Install Ruby, build-essential, and dory automatically? [y/n]' install_dory
+  [[ ${install_dory:-n} == 'y' ]] || return 0
+
+  install_ruby_and_build_tools || return 1
+  ensure_user_gem_bin_in_path
+
+  message 'Installing dory gem for the current user...'
+  confirm_command 'gem install --user-install dory' || return 1
+  ensure_user_gem_bin_in_path
+
+  if ! installed dory; then
+    warning_message "dory was installed but is not on PATH yet. Add $(user_gem_bin_path) to your shell PATH and rerun this script if needed."
+    return 1
+  fi
+}

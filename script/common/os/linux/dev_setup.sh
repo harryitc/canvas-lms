@@ -9,6 +9,7 @@ message "It looks like you're using Linux. Let's set that up."
 
 set_service_util
 check_dependencies
+install_dory_if_missing
 check_for_dory
 start_docker_daemon
 setup_docker_as_nonroot
