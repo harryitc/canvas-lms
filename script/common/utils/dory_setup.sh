@@ -1,5 +1,6 @@
 #!/bin/bash
 source script/common/utils/common.sh
+source script/common/utils/ensure_dory_dnsmasq_image.sh
 
 function check_for_dory {
   if ! installed dory; then
@@ -16,6 +17,11 @@ function check_for_dory {
 
 function start_dory {
   message 'Starting dory...'
+  if ! ensure_dory_dnsmasq_image; then
+    message 'Unable to prepare the local dory dnsmasq image. Exiting script.'
+    exit 1
+  fi
+
   if dory status | grep -q 'not running'; then
     confirm_command 'dory up'
   elif ! dory status; then
