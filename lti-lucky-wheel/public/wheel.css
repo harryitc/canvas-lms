@@ -1,0 +1,87 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(160deg, #1e2746, #3a1c5e);
+  color: #fff;
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  text-align: center;
+}
+
+h1 {
+  margin: 8px 0 4px;
+  font-size: 28px;
+  letter-spacing: 1px;
+}
+
+.hello { opacity: 0.9; margin: 0 0 20px; }
+
+.wheel-wrap {
+  position: relative;
+  width: 380px;
+  max-width: 92vw;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+}
+
+#wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.12), 0 16px 40px rgba(0, 0, 0, 0.45);
+  background: #222;
+}
+
+/* Kim chi o tren cung, tro xuong */
+.pointer {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-top: 28px solid #ffd54a;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.4));
+  z-index: 2;
+}
+
+.spin-btn {
+  margin-top: 24px;
+  padding: 14px 40px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #2b1a4a;
+  background: linear-gradient(180deg, #ffe07a, #ffc107);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.08s ease, opacity 0.2s ease;
+}
+.spin-btn:hover { transform: translateY(-1px); }
+.spin-btn:active { transform: translateY(1px); }
+.spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.result {
+  min-height: 28px;
+  margin: 18px 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.result.win { color: #ffd54a; }
+
+.grade { min-height: 20px; margin: 4px 0; font-size: 15px; }
+.grade.ok { color: #7CFC9B; }
+.grade.err { color: #ff9c9c; }
+
+.note { opacity: 0.7; font-size: 14px; margin-top: 8px; }
